@@ -6,6 +6,7 @@ Why OOP? You can create 'containers' that make data easier to manage since objec
 
   hiding pieces of functionality and making it unavailable to the rest of the code base. 
   it protects data from being altered without specific intent
+  # why is this so important? #
 
 # Polymorphism
   
@@ -36,4 +37,20 @@ Why OOP? You can create 'containers' that make data easier to manage since objec
   ruby filenames are in snake_case and reflect the class name
     i.e. camel_case.rb
   creating a new object is called `instantiation`
-  
+
+# Instance variables
+
+  `@varname`
+  this type of variable exists as long as the object instance exists
+  ties data to the object
+  it doesn't become free once the object is instatiated like a method variable would
+  is available to use in methods for the class
+
+# instance methods vs class methods
+
+  `class methods` can be called without having to instantiate any object
+  # def self.method_name #
+
+# Class variables
+
+  denoted useing `@@var_name`

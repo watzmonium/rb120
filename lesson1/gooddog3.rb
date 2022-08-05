@@ -11,6 +11,10 @@ class GoodDog
     self.name = n
   end
 
+  def self.what_am_i
+    "I'm a GoodDog class!"
+  end
+
   def speak
     "#{name} says WOOF"
   end
@@ -27,7 +31,7 @@ class GoodDog
 end
 
 poop = GoodDog.new("3'1", "455 lbs", "Bork")
-
+p GoodDog.what_am_i
 puts poop.speak
 puts poop.info
 poop.change_info("2'0", "1 lb", "Gorp")
