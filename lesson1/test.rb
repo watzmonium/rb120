@@ -1,5 +1,17 @@
-def rev(string)
-  string.split.map { |word| word.length > 4 ? word.reverse : word }.join(' ')
+class MyClass
+  attr_accessor :word
+
+  def initialize(name)
+    @word = name
+  end
+
+  def word
+    @word
+    'hello'
+  end
 end
 
-puts rev('hello i am a poopy butt boy')
+c = MyClass.new('bob')
+p c.word = 'hi'
+c.word
+p c.inspect
