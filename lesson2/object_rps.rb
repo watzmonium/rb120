@@ -1,24 +1,25 @@
 class RPSGame
   GAMES_TO_WIN = 3
-  PENTAGRAM = [
-    "         ,-  R <,",
-    "      ,-'   ^\\  '-,",
-    "  <,-'     /  \\    '-,_",
-    "L  _______/____\\________> P",
-    " ^.      /      \\     ,-'^",
-    "|    -, /        \\ ,-'   |",
-    "|      /-.      ,-\\      |",
-    "|     /   '-,.-'   \\     |",
-    "|    /    ,-''-.    \\    |",
-    "|   /  ,-'      '-.  \\   |",
-    "V / <'            '-. V  |",
-    "S -------------------> C"]
+  PENTAGRAM = ["         ,-  R <,",
+               "      ,-'   ^\\  '-,",
+               "  <,-'     /  \\    '-,_",
+               "L  _______/____\\________> P",
+               " ^.      /      \\     ,-'^",
+               "|    -, /        \\ ,-'   |",
+               "|      /-.      ,-\\      |",
+               "|     /   '-,.-'   \\     |",
+               "|    /    ,-''-.    \\    |",
+               "|   /  ,-'      '-.  \\   |",
+               "V / <'            '-. V  |",
+               "S -------------------> C"]
+
   attr_accessor :human, :computer
 
   def initialize
     @human = Human.new
-    @computer = get_cpu_players
-    Move.valid_moves << [Rock.new, Paper.new, Scissors.new, Lizard.new, Spock.new]
+    @computer = fetch_cpu_players
+    Move.valid_moves << [Rock.new, Paper.new,
+                         Scissors.new, Lizard.new, Spock.new]
     Move.valid_moves.flatten!
   end
 
@@ -42,6 +43,7 @@ class RPSGame
     puts "Thanks for playing!"
   end
 
+  # rubocop:disable Metrics/AbcSize
   def display_move_history
     return unless yes_or_no?("Do you want to see move history?")
     1.upto(human.move_history.size) do |round|
@@ -51,17 +53,19 @@ class RPSGame
       puts
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
-  def get_cpu_players
+  def fetch_cpu_players
     [Cavemanspock.new, Lizguy.new].sample
   end
 
   def display_instructions
     return unless yes_or_no?("Would you like instructions on how to play?")
     puts "This game is like rock paper scissors, except with lizards and spock"
-    puts "Please reference the diagram below using the 'arrow lines' to determine what beats what."
+    puts "Please reference the diagram below using the 'arrow lines'"
+    puts "to determine what beats what."
     puts PENTAGRAM
     puts "Press any key to continue"
     gets
@@ -168,25 +172,27 @@ class Human < Player
   end
 
   def choose
-    mv = nil
+    mv = player_move
+    temp_move = Move.valid_moves.select { |obj| obj.value == mv }
+    self.move = temp_move[0]
+    move_history << move.value
+  end
+
+  def player_move
     loop do
       puts "Please choose: rock, paper, scissors, lizard, or spock:"
       mv = gets.chomp.downcase
-      break if Move::CHOICES.keys.include?(mv)
+      return mv if Move::CHOICES.keys.include?(mv)
       system 'clear'
       puts "please enter a valid choice."
     end
-    temp_move = Move.valid_moves.select { |obj| obj.value == mv }
-    self.move = temp_move[0]
-    self.move_history << move.value
   end
 end
 
 class Computer < Player
-
   def choose
     self.move = Move.valid_moves.sample
-    self.move_history << move.value
+    move_history << move.value
   end
 end
 
@@ -197,7 +203,7 @@ class Lizguy < Computer
 
   def choose
     self.move = Lizard.new
-    self.move_history << move.value
+    move_history << move.value
   end
 end
 
@@ -207,18 +213,20 @@ class Cavemanspock < Computer
   end
 
   def choose
+    # rubocop:disable Style/ConditionalAssignment
     a = rand(2)
     if a == 1
       self.move = Rock.new
     else
       self.move = Spock.new
     end
-    self.move_history << move.value
+    # rubocop:enable Style/ConditionalAssignment
+    move_history << move.value
   end
 end
 
 class Move
-  CHOICES = { 'rock' => ['scissors', 'lizard'], 
+  CHOICES = { 'rock' => ['scissors', 'lizard'],
               'paper' => ['rock', 'spock'], 'scissors' => ['paper', 'lizard'],
               'lizard' => ['paper', 'spock'], 'spock' => ['rock', 'scissors'] }
 
