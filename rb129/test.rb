@@ -1,16 +1,10 @@
-module Swimmable
-  def enable_swimming
-    @can_swim = true
+class Person
+  attr_reader :name
+  
+  def set_name
+    @name = 'Bob'
   end
 end
 
-class Dog
-  include Swimmable
-
-  def swim
-    "swimming!" if @can_swim
-  end
-end
-
-teddy = Dog.new
-p teddy.swim
+bob = Person.new
+p bob.name
