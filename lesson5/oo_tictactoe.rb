@@ -42,6 +42,7 @@ class TTTGame
   def play
     display_message('Welcome to TTT!')
     @user = Human.new
+    cpu.easy_mode?
     loop do
       turn_person = go_first?
       game_loop(turn_person)
@@ -143,7 +144,6 @@ class TTTGame
 
   def reset
     @board = Board.new
-    @cpu = Computer.new
     @winner = nil
   end
 end
@@ -277,7 +277,14 @@ class Computer < Player
   CPU_NAMES = ['Frederic', 'Gustav', 'Lizzy~', 'Caveman Spock'].freeze
   def initialize
     @name = CPU_NAMES.sample
+    @easy_mode = false
     super
+  end
+
+  def easy_mode?
+    puts 'Do you want to play on easy mode? (Y/N)'
+    choice = gets.chomp
+    @easy_mode = true if choice.upcase == 'Y'
   end
 
   def take_turn(board)
@@ -285,7 +292,16 @@ class Computer < Player
     board[best_move(board, human_marker)] = user_marker
   end
 
+  private
+
+  attr_reader :easy_mode
+
   def best_move(board, human_marker)
+    if easy_mode
+      chance = rand(3)
+      return board.free_squares.sample if chance == 1
+    end
+
     winning_move = find_move(board, user_marker)
     return winning_move if winning_move
 
