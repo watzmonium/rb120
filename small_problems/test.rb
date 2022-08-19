@@ -47,7 +47,7 @@ class Apple < Fruit
   def consume
     self.eat # works because same class hierarchy
     self.crush # works because same class hierarchy
-    orange.eat # does work because in same subclass
+    orange.eat # DOES work because in same subclass
     # orange.crush #=> doesn't work because collaborator object even though same subclass
   end
 end
@@ -67,6 +67,7 @@ class Potato
   end
 
   def destroy
+    # berries.crush doesnt work because not in same subclass
     berries.destroy #works because doesn't directly call private
   end
 end
