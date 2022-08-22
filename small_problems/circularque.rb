@@ -1,9 +1,8 @@
-class NoSpaceError < StandardError; end
-
 class CircularQueue
   def initialize(size)
     @size = size
-    @pointer = 0
+    @curr_pointer = 0
+    @old_pointer = 0
     @queue = initialize_queue(size)
   end
 
@@ -12,45 +11,22 @@ class CircularQueue
   end
 
   def enqueue(object)
-    begin
-      location = first_nil
-      queue[location] = object
-      @pointer = increment_pointer(location)
-    rescue NoSpaceError
-      dequeue
-      retry
-    end
+    self.old_pointer = increment_pointer(curr_pointer) unless queue[curr_pointer].nil?
 
+    queue[curr_pointer] = object
+    self.curr_pointer = increment_pointer(curr_pointer)
   end
 
   def dequeue
-    location = self.pointer
-    @size.times do
-      temp = queue[location]
-      unless temp == nil
-        queue[location] = nil
-        @location = location
-        return temp
-      end
-      location = increment_pointer(location)
-    end
-    nil
+    buffer = queue[old_pointer]
+    queue[old_pointer] = nil
+    self.old_pointer = increment_pointer(old_pointer) unless buffer == nil
+    buffer
   end
 
   private
 
-  attr_accessor :queue, :pointer
-
-  def first_nil
-    location = self.pointer
-    @size.times do
-      if queue[location] == nil
-        return location
-      end
-      location = increment_pointer(location)
-    end
-    raise NoSpaceError.new("No space in queue")
-  end
+  attr_accessor :queue, :curr_pointer, :old_pointer
 
   def increment_pointer(location)
     (location + 1) % @size
