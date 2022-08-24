@@ -28,6 +28,7 @@ Why OOP? You can create 'containers' that make data easier to manage since objec
 
   everything that has a value is an object
   methods, blocks, and variables are not objects
+  collaborative objects associative relationship  
 
 # Classes
 
